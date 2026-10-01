@@ -1,4 +1,5 @@
 streamlit
+groq
 requests
 pypdf
 sentence-transformers
