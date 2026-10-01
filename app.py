@@ -676,7 +676,7 @@ def render_sidebar():
     st.sidebar.divider()
 
     st.sidebar.success(
-    "Groq AI configured"
+    "Groq Cloud AI configured"
 )
 
     st.sidebar.caption(
