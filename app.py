@@ -491,30 +491,30 @@ Answer only from the retrieved context.
 """
 
     try:
-    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-
-    response = client.chat.completions.create(
-        model=LLM_MODEL,
-        messages=[
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT,
-            },
-            {
-                "role": "user",
-                "content": user_prompt,
-            },
-        ],
-        temperature=0,
-    )
-
-    answer = response.choices[0].message.content
-    return answer.strip()
-
-except Exception as exc:
-    raise RuntimeError(
-        f"Groq request failed: {exc}"
-    )
+        client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+    
+        response = client.chat.completions.create(
+            model=LLM_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SYSTEM_PROMPT,
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt,
+                },
+            ],
+            temperature=0,
+        )
+    
+        answer = response.choices[0].message.content
+        return answer.strip()
+    
+    except Exception as exc:
+        raise RuntimeError(
+            f"Groq request failed: {exc}"
+        )
             
 
 # ============================================================
