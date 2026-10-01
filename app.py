@@ -40,9 +40,9 @@ import faiss
 import numpy as np
 import streamlit as st
 from dotenv import load_dotenv
-import requests
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
+from groq import Groq
 
 
 # ============================================================
@@ -51,8 +51,7 @@ from sentence_transformers import SentenceTransformer
 
 load_dotenv()
 
-LLM_MODEL = "llama3.2:3b"
-OLLAMA_URL = "http://localhost:11434/api/chat"
+LLM_MODEL = "llama-3.3-70b-versatile"
 EMBEDDING_MODEL = os.getenv(
     "EMBEDDING_MODEL",
     "sentence-transformers/all-MiniLM-L6-v2",
@@ -460,14 +459,14 @@ DOCUMENT CONTENT:
 
 
 # ============================================================
-# Ollama  ANSWER GENERATION
+# GROQ ANSWER GENERATION
 # ============================================================
 
 def generate_answer(
     question: str,
     documents: List[Dict],
 ) -> str:
-    """Generate answer using Ollama."""
+    """Generate answer using Groq."""
 
 
     if not documents:
@@ -492,38 +491,29 @@ Answer only from the retrieved context.
 """
 
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": LLM_MODEL,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": SYSTEM_PROMPT,
-                    },
-                    {
-                        "role": "user",
-                        "content": user_prompt,
-                    },
-                ],
-                "stream": False,
-                "options": {
-                    "temperature": 0
-                },
+    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
+    response = client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT,
             },
-            timeout=120,
-        )
+            {
+                "role": "user",
+                "content": user_prompt,
+            },
+        ],
+        temperature=0,
+    )
 
-        response.raise_for_status()
+    answer = response.choices[0].message.content
+    return answer.strip()
 
-        data = response.json()
-        answer = data["message"]["content"].strip()
-
-        return answer
-
-    except Exception as exc:
-        raise RuntimeError(
-        f"Ollama request failed: {exc}"
+except Exception as exc:
+    raise RuntimeError(
+        f"Groq request failed: {exc}"
     )
             
 
