@@ -676,7 +676,7 @@ def render_sidebar():
     st.sidebar.divider()
 
     st.sidebar.success(
-    "Ollama local AI configured"
+    "Groq AI configured"
 )
 
     st.sidebar.caption(
