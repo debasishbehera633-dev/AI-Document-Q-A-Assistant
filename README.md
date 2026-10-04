@@ -18,8 +18,7 @@ A local AI-powered document question-answering application built using RAG (Retr
 
 - Python
 - Streamlit
-- Ollama
-- Llama 3.2 3B
+- Groq 
 - Sentence Transformers
 - FAISS
 - PyPDF
